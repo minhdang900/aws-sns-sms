@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const sns = require("./sns");
+
 require('dotenv').config();
 
 var AWS = require('aws-sdk');
@@ -16,11 +18,11 @@ app.get('/', (req, res) => {
             'AWS.SNS.SMS.SenderID': {
                 'DataType': 'String',
                 'StringValue': req.query.subject
-            }
+            },
         }
     };
 
-    var publishTextPromise = new AWS.SNS({ apiVersion: '2010-03-31' }).publish(params).promise();
+    var publishTextPromise = sns.publish(params).promise();
 
     publishTextPromise.then(
         function (data) {
